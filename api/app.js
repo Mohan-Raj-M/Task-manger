@@ -3,9 +3,24 @@ const app = express();
 const bodyParser = require('body-parser');
 const { mongoose } = require('./db/mongoose');
 const { List, Task } = require('./db/models');
+let cors = require('cors');
 /*Route Handlers*/
 
 app.use(bodyParser.json());
+
+app.use(cors());
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*'); // update to match the domain you will make the request from
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+
+  // if (req.method === 'OPTIONS') {
+  //   res.status(200).end();
+  // }
+  next();
+});
 /*List Routes*/
 
 /**
@@ -101,6 +116,8 @@ app.get('/lists/:listId/tasks/:taskId', (req, res) => {
   });
 });
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log('server is running on port 3000');
 });
+
+//https://taskmanagertesting.herokuapp.com/
